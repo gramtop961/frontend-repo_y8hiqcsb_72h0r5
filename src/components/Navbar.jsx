@@ -1,6 +1,9 @@
 import { ShoppingCart, Sprout } from "lucide-react";
+import { useCart } from "./CartContext";
 
 export default function Navbar() {
+  const { totalItems, setIsOpen } = useCart();
+
   return (
     <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,9 +22,14 @@ export default function Navbar() {
             <a href="#contact" className="hover:text-emerald-700 transition-colors">Contact</a>
           </nav>
 
-          <button className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 transition-colors">
+          <button onClick={() => setIsOpen(true)} className="relative inline-flex items-center gap-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 transition-colors">
             <ShoppingCart className="h-5 w-5" />
             <span className="hidden sm:inline">Cart</span>
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-2 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-white px-1 text-emerald-700 text-xs font-semibold shadow">
+                {totalItems}
+              </span>
+            )}
           </button>
         </div>
       </div>

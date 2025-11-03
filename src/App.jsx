@@ -2,42 +2,54 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import ProductsGrid from "./components/ProductsGrid";
 import Testimonials from "./components/Testimonials";
+import AnimatedSection from "./components/AnimatedSection";
+import { motion, useScroll, useSpring } from "framer-motion";
 
 function App() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 });
+
   return (
     <div className="min-h-screen bg-white text-slate-800">
       <Navbar />
+      <motion.div style={{ scaleX }} className="fixed left-0 right-0 top-0 h-1 origin-left bg-emerald-600 z-40" />
       <main>
-        <Hero />
-        <ProductsGrid />
+        <AnimatedSection>
+          <Hero />
+        </AnimatedSection>
+        <AnimatedSection>
+          <ProductsGrid />
+        </AnimatedSection>
 
-        {/* Benefits quick section */}
-        <section id="benefits" className="bg-white py-14">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection className="bg-white py-14">
+          <div id="benefits" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-slate-200 p-6">
-                <p className="font-semibold">Plant-based formulas</p>
-                <p className="mt-1 text-slate-600 text-sm">Safe for kids, pets, and the planet</p>
-              </div>
-              <div className="rounded-2xl border border-slate-200 p-6">
-                <p className="font-semibold">Powerful cleaning</p>
-                <p className="mt-1 text-slate-600 text-sm">Cuts grease and grime with ease</p>
-              </div>
-              <div className="rounded-2xl border border-slate-200 p-6">
-                <p className="font-semibold">Refill & save</p>
-                <p className="mt-1 text-slate-600 text-sm">Reduce plastic with concentrates</p>
-              </div>
-              <div className="rounded-2xl border border-slate-200 p-6">
-                <p className="font-semibold">Fast, free shipping</p>
-                <p className="mt-1 text-slate-600 text-sm">On orders over $35</p>
-              </div>
+              {["Plant-based formulas", "Powerful cleaning", "Refill & save", "Fast, free shipping"].map((title, i) => (
+                <motion.div
+                  key={title}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: i * 0.06 }}
+                  className="rounded-2xl border border-slate-200 p-6"
+                >
+                  <p className="font-semibold">{title}</p>
+                  <p className="mt-1 text-slate-600 text-sm">
+                    {i === 0 && "Safe for kids, pets, and the planet"}
+                    {i === 1 && "Cuts grease and grime with ease"}
+                    {i === 2 && "Reduce plastic with concentrates"}
+                    {i === 3 && "On orders over $35"}
+                  </p>
+                </motion.div>
+              ))}
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
-        <Testimonials />
+        <AnimatedSection>
+          <Testimonials />
+        </AnimatedSection>
 
-        {/* Contact / Footer */}
         <footer id="contact" className="bg-slate-900 text-slate-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="grid gap-8 md:grid-cols-2">
